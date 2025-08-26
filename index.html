@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Peliculas por encargo</title>
+<title>Películas por encargo</title>
 
 <!-- Fuentes -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
@@ -14,7 +14,6 @@
   --surface: #0f0f0f;
   --muted: #9b9b9b;
   --accent: #127369;
-  --glass: rgba(255,255,255,0.04);
   --card-shadow: 0 12px 30px rgba(0,0,0,0.7);
   --radius: 14px;
 }
@@ -24,20 +23,17 @@
 html,body{height:100%;margin:0;font-family:"Plus Jakarta Sans","Montserrat",system-ui,sans-serif;background:var(--bg);color:#fff}
 a{color:inherit;text-decoration:none}
 
-/* NAV / HEADER (OJO: header tiene class app-header) */
+/* NAV / HEADER */
 header.app-header{
   display:flex;align-items:center;justify-content:space-between;padding:18px 28px;
   gap:16px;background:linear-gradient(180deg, rgba(0,0,0,0.35), transparent);
   position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(255,255,255,0.03);
 }
 .brand{display:flex;gap:12px;align-items:center}
-.logo{width:38px;height:38px;border-radius:6px;background:linear-gradient(135deg,#111,#222);
-  box-shadow:0 4px 10px rgba(0,0,0,0.7), inset 0 -6px 14px rgba(255,255,255,0.02);
-  display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);font-family:"Montserrat"}
 nav{display:flex;gap:14px;align-items:center;color:var(--muted);font-size:0.95rem}
 .nav-cta{padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(4px);background:rgba(255,255,255,0.02);font-weight:600;color:#fff}
 
-/* MAIN / CONTENEDOR DE BOTONES */
+/* MAIN */
 #main-content{
   padding:28px;
   max-width:1200px;
@@ -49,7 +45,7 @@ nav{display:flex;gap:14px;align-items:center;color:var(--muted);font-size:0.95re
   align-items:flex-start;
 }
 
-/* BOTONES (ahora sí) */
+/* BOTONES */
 button.page-btn{
   background:linear-gradient(90deg,var(--accent),#127369 60%);
   border:none;color:white;padding:12px 18px;border-radius:12px;font-weight:700;cursor:pointer;
@@ -58,21 +54,9 @@ button.page-btn{
 }
 button.page-btn:hover{transform:translateY(-6px);box-shadow:0 18px 34px #10403B}
 
-/* IFRAME y página interna */
-iframe{
-  width:100%;max-width:980px;height:75vh;border:none;border-radius:14px;margin-top:20px;
-  box-shadow:0 12px 40px rgba(0,0,0,0.7);
-}
-.back-btn{
-  margin-top:18px;background:transparent;border:2px solid var(--accent);color:var(--accent);
-  font-weight:700;padding:10px 18px;border-radius:10px;cursor:pointer;
-}
-.back-btn:hover{background:var(--accent);color:#fff}
-
-/* Pequeños detalles responsivos */
+/* Responsive */
 @media (max-width:640px){
   button.page-btn{min-width:44vw;padding:10px 12px}
-  iframe{height:60vh}
 }
 </style>
 </head>
@@ -80,26 +64,22 @@ iframe{
 
 <header class="app-header">
   <div class="brand">
-    
     <div style="font-weight:700; font-size:2rem; color:#127369; text-align:center;">
       Películas por encargo
     </div>
-    
   </div>
   <nav>
     <div class="nav-cta">Inicio</div>
   </nav>
 </header>
 
-<main id="main-content">
-  <!-- Los botones se inyectan desde JS -->
-</main>
+<main id="main-content"></main>
 
 <script>
   const pages = [
-    { name: 'La serpiente blanca', iframeUrl: 'https://mega.nz/embed/j3I0mADR#RNNBopd3TP5hno7JEggYSA6aNiL5vYRU4xHza_uDpWI', slug: 'la-serpiente-blanca' },
-    { name: 'Mas alla de la luna', iframeUrl: 'https://drive.google.com/file/d/1DO_WhLM7bT-XPpny1HgRk0lWFt57bsoK/preview', slug: 'mas-alla-de-la-luna' },
-    { name: 'La serpiente verde', iframeUrl: 'https://drive.google.com/file/d/157zBEAqzFSkzghmlr0_VPUvxmbfUxpI1/view?usp=sharing', slug: 'la-serpiente-verde' }
+    { name: 'La serpiente blanca', url: 'https://mega.nz/embed/j3I0mADR#RNNBopd3TP5hno7JEggYSA6aNiL5vYRU4xHza_uDpWI' },
+    { name: 'Más allá de la luna', url: 'https://drive.google.com/file/d/1DO_WhLM7bT-XPpny1HgRk0lWFt57bsoK/preview' },
+    { name: 'La serpiente verde', url: 'https://drive.google.com/file/d/157zBEAqzFSkzghmlr0_VPUvxmbfUxpI1/view?usp=sharing' }
   ];
 
   const main = document.getElementById('main-content');
@@ -110,37 +90,12 @@ iframe{
       const btn = document.createElement('button');
       btn.className = 'page-btn';
       btn.textContent = page.name;
-      btn.onclick = ()=> {
-        // intenta abrir en iframe; si la URL contiene "mega.nz" abrimos en nueva pestaña (MEGA suele bloquear embed)
-        if(page.iframeUrl.includes('oasooasodasodasdoasod')){
-          window.open(page.iframeUrl, '_blank');
-          return;
-        }
-        history.pushState({slug:page.slug}, '', `#${page.slug}`);
-        showIframePage(page);
-      };
+      btn.onclick = ()=> window.open(page.url, '_blank');
       main.appendChild(btn);
     });
   }
 
-  function showIframePage(page){
-    main.innerHTML = `
-      <h2 style="margin:0 0 12px">${page.name}</h2>
-      <iframe src="${page.iframeUrl}" allowfullscreen sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
-      <div><button class="back-btn">&larr; Volver</button></div>
-    `;
-    const back = main.querySelector('.back-btn');
-    back.onclick = ()=> { history.pushState({}, '', window.location.pathname); showButtons(); };
-  }
-
-  function handleRouting(){
-    const slug = location.hash.replace('#','');
-    const page = pages.find(p=>p.slug===slug);
-    if(page) showIframePage(page); else showButtons();
-  }
-
-  window.addEventListener('popstate', handleRouting);
-  handleRouting();
+  showButtons();
 </script>
 
 </body>
